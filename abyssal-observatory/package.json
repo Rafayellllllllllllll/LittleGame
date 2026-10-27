@@ -1,0 +1,15 @@
+{
+  "name": "abyssal-observatory",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "程序化生成的深海观测站：荧光浮游生物、脉动水母、流场与光柱，纯前端 Canvas 2D",
+  "scripts": {
+    "start": "python -m http.server 8789",
+    "test": "node test/core.test.mjs && node test/verify.mjs",
+    "test:sim": "node test/core.test.mjs",
+    "test:wiring": "node test/verify.mjs"
+  },
+  "keywords": ["canvas", "generative", "noise", "deep-sea", "visualization", "zero-dependency"],
+  "license": "MIT"
+}

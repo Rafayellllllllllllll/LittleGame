@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0",
+  "id": "platform-pressed-v1",
+  "type": "image",
+  "name": "落脚平台被踩状态"
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#00060e">
+<title>深海观测站 · Abyssal Observatory</title>
+<meta name="description" content="程序化生成的深海观测站：荧光浮游生物、脉动水母、流场与光柱，纯前端 Canvas 2D。">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<canvas id="sea" aria-label="深海观测站"></canvas>
+
+<div id="hud">
+  <div class="readout">
+    <span class="label">DEPTH</span>
+    <span class="value" id="depth">380</span>
+    <span class="unit">m</span>
+  </div>
+  <div class="readout">
+    <span class="label">BIOLUME</span>
+    <span class="value" id="bio">0.0</span>
+    <span class="unit">lm</span>
+  </div>
+  <div class="readout ghost">
+    <span class="label">FPS</span>
+    <span class="value" id="fps">–</span>
+  </div>
+</div>
+
+<div id="hint">
+  <span><b>拖动</b> 制造水流</span>
+  <span><b>点击</b> 撒一把荧光</span>
+  <span><b>M</b> 深海低频声</span>
+  <span><b>空格</b> 暂停</span>
+  <span><b>H</b> 收起面板</span>
+</div>
+
+<div id="paused">已暂停 · 空格继续</div>
+
+<script type="module" src="./scene.js"></script>
+</body>
+</html>

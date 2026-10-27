@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>小游戏 · 五个打开就能玩的前端小项目</title>
+<style>
+  :root {
+    --bg-deep: #0d0b12;
+    --bg-rise: #171220;
+    --surface: #1b1626;
+    --surface-hover: #241c31;
+    --line: rgba(255, 122, 182, 0.16);
+    --line-strong: rgba(255, 122, 182, 0.42);
+    --accent: #ff7ab6;
+    --accent-soft: rgba(255, 122, 182, 0.12);
+    --cool: #7ab6ff;
+    --text: #f6f2f8;
+    --text-dim: #a89eb4;
+    --radius: 18px;
+    --shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.9);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(1100px 620px at 12% -8%, rgba(255, 122, 182, 0.16), transparent 62%),
+      radial-gradient(900px 540px at 88% 4%, rgba(122, 182, 255, 0.12), transparent 60%),
+      linear-gradient(178deg, var(--bg-rise) 0%, var(--bg-deep) 58%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(28px, 6vw, 72px) clamp(18px, 4vw, 40px) 64px;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: clamp(34px, 5vw, 56px);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    align-self: flex-start;
+    padding: 6px 14px 6px 11px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px 2px rgba(255, 122, 182, 0.7);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 7.5vw, 4.4rem);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+
+  h1 .grad {
+    background: linear-gradient(102deg, var(--accent) 0%, #ffb3d2 42%, var(--cool) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .lede {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--text-dim);
+    font-size: clamp(0.98rem, 2.3vw, 1.12rem);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+    gap: clamp(14px, 2.2vw, 22px);
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: clamp(20px, 3vw, 28px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(168deg, var(--surface) 0%, #14101d 100%);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), border-color 240ms ease, background 240ms ease;
+  }
+
+  .card:hover,
+  .card:focus-visible {
+    transform: translateY(-5px);
+    border-color: var(--line-strong);
+    background: linear-gradient(168deg, var(--surface-hover) 0%, #171122 100%);
+  }
+
+  .card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 16px;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    font-size: 23px;
+    line-height: 1;
+  }
+
+  .card h2 {
+    margin: 0 0 8px;
+    font-size: 1.24rem;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .card p {
+    margin: 0 0 18px;
+    color: var(--text-dim);
+    font-size: 0.94rem;
+    flex: 1 1 auto;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: auto;
+  }
+
+  .tag {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(122, 182, 255, 0.22);
+    background: rgba(122, 182, 255, 0.09);
+    color: var(--cool);
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .tag.warn {
+    border-color: rgba(255, 196, 122, 0.28);
+    background: rgba(255, 196, 122, 0.1);
+    color: #ffc47a;
+  }
+
+  .notes {
+    margin-top: clamp(40px, 6vw, 64px);
+    padding-top: clamp(24px, 4vw, 34px);
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(18px, 3vw, 34px);
+  }
+
+  .note h3 {
+    margin: 0 0 7px;
+    font-size: 0.98rem;
+    color: var(--text);
+    font-weight: 650;
+  }
+
+  .note p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+
+  footer {
+    margin-top: clamp(40px, 6vw, 60px);
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-dim);
+    font-size: 0.86rem;
+  }
+
+  footer a {
+    color: var(--cool);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(122, 182, 255, 0.4);
+    padding-bottom: 1px;
+  }
+
+  footer a:hover { color: #a8d0ff; }
+
+  footer a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+    .card:hover, .card:focus-visible { transform: none; }
+  }
+
+  @media print {
+    body {
+      background: #fff;
+      color: #111;
+    }
+    .card {
+      border: 1px solid #ccc;
+      background: #fff;
+      box-shadow: none;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .card p, .lede, .note p, footer { color: #444; }
+    .card h2, .note h3 { color: #111; }
+    .tag { border-color: #bbb; color: #333; background: #f4f4f4; }
+    .eyebrow { border-color: #bbb; color: #333; background: #f4f4f4; }
+    h1 .grad { color: #111; -webkit-text-fill-color: #111; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">全部纯前端 · 打开即玩</span>
+    <h1>五个<span class="grad">小游戏</span></h1>
+    <p class="lede">每个点开就能直接在浏览器里玩，不用装 App、不用注册、不用联网下载素材。手机上也能开。</p>
+  </header>
+
+  <main>
+    <h2 class="visually-hidden">全部游戏</h2>
+    <ul class="grid">
+
+      <li>
+        <a class="card" href="./olio-big-jump/">
+          <div class="icon" aria-hidden="true">🐱</div>
+          <h2>奥利奥大胆跳</h2>
+          <p>踩着平台一路往上跳的猫咪跳跃游戏，跳得越高，路上藏的彩蛋猫越多。</p>
+          <div class="tags">
+            <span class="tag">Phaser 3</span>
+            <span class="tag">手机触屏</span>
+            <span class="tag">有音效</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a class="card" href="./gesture-flower/">
+          <div class="icon" aria-hidden="true">🌸</div>
+          <h2>手势粒子花朵</h2>
+          <p>打开摄像头抬起手，粒子花朵会跟着你的手势张开、合拢、旋转。</p>
+          <div class="tags">
+            <span class="tag">Three.js</span>
+            <span class="tag">MediaPipe 手部识别</span>
+            <span class="tag warn">需要摄像头</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a class="card" href="./big-blue-fish/">
+          <div class="icon" aria-hidden="true">🐟</div>
+          <h2>蓝色大肥鱼</h2>
+          <p>操控一条小鱼在海里吃，吃得越多长得越大，一路吃成蓝色大肥鱼。</p>
+          <div class="tags">
+            <span class="tag">Canvas 2D</span>
+            <span class="tag">键盘操作</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a class="card" href="./powder-box/">
+          <div class="icon" aria-hidden="true">⏳</div>
+          <h2>微粒沙盘</h2>
+          <p>沙、水、油、火、蒸汽、植物、酸、岩浆互相反应，拖着鼠标就能画。火会烧起来，岩浆遇水会凝成石头。</p>
+          <div class="tags">
+            <span class="tag">Canvas 2D</span>
+            <span class="tag">物理沙盘</span>
+            <span class="tag">零依赖</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a class="card" href="./abyssal-observatory/">
+          <div class="icon" aria-hidden="true">🌊</div>
+          <h2>深海观测站</h2>
+          <p>荧光浮游生物顺着水流漂、水母缓慢上浮、海雪下沉、光柱从天顶斜切下来。点一下撒一把荧光。</p>
+          <div class="tags">
+            <span class="tag">Canvas 2D</span>
+            <span class="tag">程序化生成</span>
+            <span class="tag">M 键开声音</span>
+          </div>
+        </a>
+      </li>
+
+    </ul>
+
+    <section class="notes" aria-label="使用说明">
+      <div class="note">
+        <h3>手机上玩</h3>
+        <p>直接用浏览器打开就行。想当成 App，在 Chrome 菜单里选「添加到主屏幕」。</p>
+      </div>
+      <div class="note">
+        <h3>手势花朵要注意</h3>
+        <p>它要用摄像头识别手部动作，浏览器会弹权限提示，点允许。不授权就只能看到静止画面。</p>
+      </div>
+      <div class="note">
+        <h3>没有广告和追踪</h3>
+        <p>全部都是纯前端静态文件，跑在你自己浏览器里，不上传任何数据。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>小游戏合集 · 五个独立项目</span>
+    <span><a href="https://github.com/Rafayellllllllllllll/LittleGame" target="_blank" rel="noopener noreferrer">查看 GitHub 仓库</a></span>
+  </footer>
+
+</div>
+</body>
+</html>

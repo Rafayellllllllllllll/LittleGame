@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a0d12">
+<title>微粒沙盘 · Powder Box</title>
+<meta name="description" content="落沙物理沙盘：沙、水、油、火、蒸汽、植物、酸、岩浆，200×120 网格实时模拟。">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>微粒沙盘</h1>
+      <span class="sub">POWDER BOX · 200×120</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>粒子</span><b id="cells">0</b></div>
+      <div class="stat"><span>帧率</span><b id="fps">–</b></div>
+      <div class="stat"><span>步数</span><b id="tick">0</b></div>
+    </div>
+  </header>
+
+  <main id="stage">
+    <canvas id="grid"></canvas>
+    <div class="frame-glow"></div>
+  </main>
+
+  <footer id="console">
+    <div id="tools" role="toolbar" aria-label="元素"></div>
+
+    <div class="controls">
+      <label class="brush">
+        <span>笔刷 <b id="brushLabel">4</b></span>
+        <input id="brush" type="range" min="1" max="14" value="4">
+      </label>
+
+      <div class="buttons">
+        <button id="pause" type="button">暂停</button>
+        <button id="stepOne" type="button">单步</button>
+        <button id="clear" type="button" class="danger">清空</button>
+      </div>
+
+      <div class="presets">
+        <span>场景</span>
+        <button data-preset="hourglass" type="button">沙漏</button>
+        <button data-preset="volcano" type="button">火山</button>
+        <button data-preset="rainforest" type="button">雨林</button>
+        <button data-preset="acidpool" type="button">酸池</button>
+      </div>
+    </div>
+
+    <p class="hint">
+      拖动绘制 · 右键擦拭 · <b>1-9</b> 换元素 · <b>0</b> 橡皮 · <b>[ ]</b> 笔刷 · <b>空格</b> 暂停 · <b>N</b> 单步
+    </p>
+  </footer>
+</div>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>

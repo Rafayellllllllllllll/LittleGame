@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#04203f">
+<title>蓝色大肥鱼 · 吃小鱼长大</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<canvas id="game" aria-label="蓝色大肥鱼"></canvas>
+
+<div id="hud">
+  <div class="hud-left">
+    <div class="stat"><b id="score">0</b><span>分数</span></div>
+    <div class="stat"><b id="len">14</b><span>体长</span></div>
+  </div>
+  <div class="lives" id="lives"></div>
+</div>
+
+<div id="start" class="overlay">
+  <div class="panel">
+    <h1>蓝色大肥鱼</h1>
+    <p class="sub">主角是蓝色 Q 版女仆鱼。<br>吃比你小的鱼，越长越大；别撞上比你大的家伙。</p>
+    <button id="play" type="button">开始游戏</button>
+    <p class="tip">鼠标移动 / 手指拖动 控制方向 · 桌面也能用 WASD / 方向键</p>
+  </div>
+</div>
+
+<div id="over" class="overlay hidden">
+  <div class="panel">
+    <h2>被吃掉啦</h2>
+    <p class="sub">分数 <b id="finalScore">0</b> · 体长 <b id="finalLen">0</b></p>
+    <button id="again" type="button">再来一次</button>
+    <p class="tip" id="best">最高分 0</p>
+  </div>
+</div>
+
+<script src="./game.js"></script>
+</body>
+</html>
