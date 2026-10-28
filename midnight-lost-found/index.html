@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1e2e">
+<title>午夜失物招领处 · 第一章：没有名字的来访者</title>
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+<div id="loading" class="loading" role="status" aria-live="polite">
+  <div class="load-lamp"></div>
+  <p>雨夜的灯正在亮起……</p>
+  <p class="load-sub" id="loadText">正在整理招领处的货架</p>
+</div>
+
+<header class="topbar" id="topbar" hidden>
+  <div><strong>午夜失物招领处</strong><span id="chapterLabel">第一章 · 没有名字的来访者</span></div>
+  <div class="top-stats">
+    <span>线索 <b id="clueStat">0/14</b></span>
+    <span>信任 <b id="trustStat">40</b></span>
+    <span>谜题 <b id="puzzleStat">0/8</b></span>
+  </div>
+</header>
+
+<main id="app" hidden>
+  <!-- 首页 -->
+  <section id="view-home" class="view">
+    <div class="hero">
+      <p class="kicker">雨 · 午夜 · 一间不打烊的招领处</p>
+      <h1>午夜失物招领处</h1>
+      <p class="subtitle">第一章：没有名字的来访者</p>
+      <p class="hero-text">你来替夜班。门口站着一个人，雨水顺着他的袖口往下滴。他说自己丢了一样东西，却在登记表的名字一栏，留了一片空白。</p>
+      <div class="hero-actions">
+        <button class="btn gold" id="btnContinue">继续游戏</button>
+        <button class="btn paper" id="btnNew">开始新的一夜</button>
+        <button class="btn ghost" id="btnHow">怎么玩</button>
+      </div>
+      <p class="save-line" id="saveLine">还没有本地存档</p>
+      <p class="cloud-line" id="cloudLine">云端：本地模式（未配置新 Supabase 项目时，进度只存在这台设备上）</p>
+      <div class="home-cards">
+        <div><b>8 个谜题</b><span>每一步都有线索可查</span></div>
+        <div><b>3 个结局</b><span>信任与选择会改变结局</span></div>
+        <div><b>线索板</b><span>把证据连起来再下结论</span></div>
+      </div>
+    </div>
+    <section class="paper-card" id="howCard" hidden>
+      <h2>怎么玩</h2>
+      <ol>
+        <li>点场景里的物品调查，先拿到线索，再解谜题。</li>
+        <li>背包里的道具可以组合；组合前先想一想：它本来是用来干什么的？</li>
+        <li>线索板上点两条线索可以建立关联，连对 4 组会解锁最终推理的提示。</li>
+        <li>和来访者对话时，出示证据会改变他的信任。每个谜题都有三级提示，提示不会扣分，但会记下来。</li>
+        <li>进度会自动保存。刷新页面后点“继续游戏”就能回来。</li>
+      </ol>
+      <button class="btn paper" id="btnCloseHow">知道了</button>
+    </section>
+  </section>
+
+  <!-- 游戏主界面 -->
+  <section id="view-game" class="view" hidden>
+    <div class="scene-wrap">
+      <canvas id="rainCanvas" aria-hidden="true"></canvas>
+      <div class="fog fog-a"></div><div class="fog fog-b"></div>
+      <div class="scene" id="scene" aria-label="失物招领处场景">
+        <div class="window-light"></div>
+        <div class="shelf shelf-top"><span>失物货架</span></div>
+        <button class="hotspot hs-recorder" data-item="recorder">旧录音机</button>
+        <button class="hotspot hs-clock" data-item="clock">墙上时钟</button>
+        <button class="hotspot hs-logbook" data-item="logbook">员工记录本</button>
+        <button class="hotspot hs-drawer" data-item="drawer">上锁的抽屉</button>
+        <button class="hotspot hs-cabinet" data-item="cabinet">三号柜</button>
+        <button class="hotspot hs-visitor" data-item="visitor">门口的来访者</button>
+        <button class="hotspot hs-counter" data-item="counter">柜台暗格</button>
+        <div class="counter-bar">招领处柜台 · 雨声从门缝里漏进来</div>
+      </div>
+      <p class="scene-hint" id="sceneHint">点一个发光的物品开始调查。先从旧录音机和员工记录本入手，线索会自己说话。</p>
+      <div class="scene-list" aria-label="场景物品列表，点按也可以调查">
+        <button data-item="recorder">旧录音机</button>
+        <button data-item="clock">墙上时钟</button>
+        <button data-item="logbook">员工记录本</button>
+        <button data-item="drawer">上锁的抽屉</button>
+        <button data-item="cabinet">三号柜</button>
+        <button data-item="visitor">门口的来访者</button>
+        <button data-item="counter">柜台暗格</button>
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="游戏面板">
+      <button class="tab active" data-tab="bag">背包</button>
+      <button class="tab" data-tab="clues">线索档案</button>
+      <button class="tab" data-tab="board">推理板</button>
+      <button class="tab" data-tab="puzzles">谜题</button>
+      <button class="tab" data-tab="npc">来访者</button>
+      <button class="tab" data-tab="settings">设置</button>
+    </nav>
+
+    <div class="panels">
+      <section class="panel active" id="panel-bag" aria-label="背包">
+        <h2>背包 <span class="muted">点一件道具查看，再点另一件可以尝试组合</span></h2>
+        <div id="bagList" class="bag-list"><p class="empty">背包还是空的。去场景里调查，就会有东西放进来。</p></div>
+        <div id="combineBox" class="combine-box" hidden>
+          <p>已选：<span id="combineSel"></span></p>
+          <button class="btn gold" id="btnCombine">组合这两件</button>
+          <button class="btn ghost" id="btnClearCombine">取消选择</button>
+          <p class="feedback" id="combineFeedback" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-clues" aria-label="线索档案">
+        <h2>线索档案</h2>
+        <div id="clueList" class="clue-list"><p class="empty">还没有线索。调查物品、解开谜题、和来访者对话都会留下线索。</p></div>
+      </section>
+
+      <section class="panel" id="panel-board" aria-label="推理板">
+        <h2>推理板 <span class="muted">点一条线索，再点另一条，建立关联；也可以拖拽</span></h2>
+        <p class="muted">连对的关联：<b id="linkCount">0 / 4</b>。连对 4 组，最终推理会多一条提醒。</p>
+        <div id="boardChips" class="board-chips"></div>
+        <div id="boardLinks" class="board-links"><p class="empty">还没有建立关联。先试试：录音带和来访者的说法，有没有对不上的地方？</p></div>
+        <button class="btn ghost" id="btnClearBoardSel">取消当前选择</button>
+      </section>
+
+      <section class="panel" id="panel-puzzles" aria-label="谜题">
+        <h2>谜题 <span class="muted">按顺序解开，前面的答案就是后面的钥匙</span></h2>
+        <div id="puzzleList" class="puzzle-list"></div>
+      </section>
+
+      <section class="panel" id="panel-npc" aria-label="来访者对话">
+        <h2>门口的来访者 <span class="muted">信任：<b id="npcTrust">40</b></span></h2>
+        <div class="dialogue-box">
+          <p class="speaker" id="dlgSpeaker">来访者</p>
+          <p id="dlgText">……</p>
+          <div id="dlgOptions" class="dlg-options"></div>
+        </div>
+        <p class="muted">出示证据前，先想一想：这条证据是帮他记起来，还是在逼他承认？</p>
+      </section>
+
+      <section class="panel" id="panel-settings" aria-label="设置">
+        <h2>设置与存档</h2>
+        <label class="setting"><input type="checkbox" id="setSound" checked> 音效与雨声</label>
+        <label class="setting"><input type="checkbox" id="setVibrate" checked> 震动反馈（设备支持时）</label>
+        <label class="setting"><input type="checkbox" id="setLarge"> 大字模式</label>
+        <label class="setting"><input type="checkbox" id="setMotion" checked> 雨滴与雾气动画</label>
+        <p class="muted" id="cloudStatus">云端同步：未配置，本地存档正常工作。</p>
+        <div class="setting-actions">
+          <button class="btn paper" id="btnExport">导出存档备份</button>
+          <button class="btn paper" id="btnImport">导入存档</button>
+          <input type="file" id="importFile" accept="application/json" hidden>
+          <button class="btn ghost" id="btnHome">回首页</button>
+          <button class="btn danger" id="btnClearSave">清除存档并重开</button>
+        </div>
+        <p class="muted">成就：<span id="achList">暂无</span></p>
+      </section>
+    </div>
+  </section>
+
+  <!-- 结局 -->
+  <section id="view-ending" class="view" hidden>
+    <div class="ending-card">
+      <p class="kicker" id="endingKicker">第一章 · 结局</p>
+      <h2 id="endingTitle"></h2>
+      <p id="endingText"></p>
+      <p class="muted" id="endingStats"></p>
+      <button class="btn gold" id="btnReplay">再玩一次（保留成就）</button>
+      <button class="btn paper" id="btnEndingHome">回首页</button>
+    </div>
+  </section>
+</main>
+
+<!-- 调查 / 谜题弹窗 -->
+<div class="modal-backdrop" id="modalBackdrop" hidden style="display:none">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="btnCloseModal" aria-label="关闭">×</button>
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
+    <div id="modalActions" class="modal-actions"></div>
+    <p class="feedback" id="modalFeedback" aria-live="polite"></p>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="js/config.js?v=4"></script>
+<script src="js/state.js?v=4"></script>
+<script src="js/data.js?v=4"></script>
+<script src="js/audio.js?v=4"></script>
+<script src="js/ui.js?v=4"></script>
+<script src="js/puzzles.js?v=4"></script>
+<script src="js/board.js?v=4"></script>
+<script src="js/dialogue.js?v=4"></script>
+<script src="js/supabase.js?v=4"></script>
+<script src="js/main.js?v=4"></script>
+</body>
+</html>
